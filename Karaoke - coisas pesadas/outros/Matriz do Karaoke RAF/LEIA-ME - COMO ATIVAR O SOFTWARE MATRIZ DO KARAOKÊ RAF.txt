@@ -1,0 +1,53 @@
+Manual de Ativação do Programa
+
+Antes de mais nada desative o antivirus pois o mesmo pode apagar arquivos que ele não conhece como seguro.
+
+Depois mude a resolução do pc ou notebook para 1024 x 768 pois se não mudar para essa resolução o mesmo não ira ficar em tela cheia.
+
+Dentro da pasta há um ícone de nome "GERADOR", click nele, ao abrir click em "Ler Numero do HD" e depois em "Encryptar"
+anote o número gerado e feche o gerador.
+
+Depois click no ícone "registrar" e cole o número copiado no campo "Digite a Licença" 
+e clique "Ativar", pronto, seu programa está ativado e totalmente funcional.
+
+Agora para abrir o programa basta clicar no ícone "Matriz do Karaokê Raf" que vai abrir o programa corretamente.
+
+Lembrete: Não coloque nenhum tipo de pendrive ou hd externo enquanto estiver usando o hd-okê, 
+pois irá gerar conflito com o número ativado. Se isso acontecer, basta retirar o pendrive ou hd externo 
+colocado recentemente que o programa voltará a funcionar normalmente, caso o contrário terá que ativá-lo novamente.
+
+
+Modo de utilização e instalação....
+-----------------------------------
+
+- vc pode usar os numeros do teclado para escolher uma musica
+
+- Tocar musica é a tecla "ENTER"
+
+- Para parar a musica pressione a tecla "s"
+
+- Para escolher, digite os numeros usando as teclas de "0 a 9" parte superior do teclado
+
+- Crédito use a tecla "P"
+
+- Fechar o software, aperte a tecla F12
+
+- Leitura aperte a tecla F10
+
+- Volume: Teclas N e M do teclado.
+
+
+o programa ja esta em modo livre caso queira modificar siga intruções a abaixo
+
+
+OBS: Sem créditos, as musicas não são executadas.se estiver em modo creditos
+
+
+se desejar que o sistema fique livre, edite o arquivo karaoke.ini e tag "CRÉDITO" digite a opção livre para deixar livre e
+credito para deixa-lo por crédito.
+
+Para o sistema iniciar com o windows, crie um atalho do "karaoke.exe" e coloque o atalho no inicializar
+que se encontra no botão iniciar do windows.
+
+Para que o software funcione corretamente, extraia os arquivos em uma pasta (ex: c:\videoke). sempre em uma unidade raiz
+As musicas devem ficar na pasta musicas (EX: c:\videoke\musicas).
