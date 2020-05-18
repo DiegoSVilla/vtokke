@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form action="{{ url_for('handle_download') }}" method="post">
+    URL Do Video: <input type="text" name="URL"><br><br>
+    Artista/Produtor: <input type="text" name="artista"><br><br>
+    Nome Da Música: <input type="text" name="musica"><br><br>
+    <input type="submit">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+[Unit]
+Description=Sing Like Hell!
+After=multi-user.target
+
+[Service]
+User=pi
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+ExecStart=/usr/bin/python3 /home/pi/karaokeApplication/vtokke.py
+Restart=always
+RestartSec=20s
+KillMode=process
+TimeoutSec=infinity
+
+[Install]
+WantedBy=multi-user.target

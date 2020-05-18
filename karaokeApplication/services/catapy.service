@@ -1,0 +1,15 @@
+[Unit]
+Description=Karaoke API and Youtube DL
+After=multi-user.target
+
+[Service]
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/karaokeApplication/catapy.py
+Restart=always
+RestartSec=10s
+KillMode=process
+TimeoutSec=infinity
+
+
+[Install]
+WantedBy=multi-user.target
