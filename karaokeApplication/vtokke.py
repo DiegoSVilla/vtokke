@@ -47,7 +47,9 @@ from threading import Thread, Event
 import time
 import platform
 
-df = pd.read_csv("/home/pi/karaokeApplication/catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
+current_location = os.path.dirname(os.path.abspath(__file__)) + '/'
+
+df = pd.read_csv(current_location + "catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
 if os.path.exists("catalogo_custom.csv"):
     dfc = pd.read_csv("catalogo_custom.csv", delimiter =',', encoding = 'utf-8', dtype=str)
     dt = pd.concat([df, dfc])
@@ -96,7 +98,7 @@ class Player(Tk.Frame):
             global dt
             # if a file is already running, then stop it.
             if codigo.get() != '':
-                df = pd.read_csv("/home/pi/karaokeApplication/catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
+                df = pd.read_csv(current_location + "catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
                 if os.path.exists("catalogo_custom.csv"):
                     dfc = pd.read_csv("catalogo_custom.csv", delimiter =',', encoding = 'utf-8', dtype=str)
                     dt = pd.concat([df, dfc])
