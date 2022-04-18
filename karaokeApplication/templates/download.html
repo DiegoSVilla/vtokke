@@ -6,12 +6,43 @@
 </head>
 <body>
 
-<form action="{{ url_for('handle_download') }}" method="post">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#myform").on("submit", function(){
+    $("#pageloader").fadeIn();
+  });//submit
+});//document ready
+</script>
+<style>
+#pageloader
+{
+  background: rgba( 255, 255, 255, 0.8 );
+  display: none;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+}
+
+#pageloader img
+{
+  left: 50%;
+  margin-left: -32px;
+  margin-top: -32px;
+  position: absolute;
+  top: 50%;
+}
+</style>
+<div id="pageloader">
+   <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+</div>
+
+<form id="myform" action="{{ url_for('handle_download') }}" method="post">
     URL Do Video: <input type="text" name="URL"><br><br>
     Artista/Produtor: <input type="text" name="artista"><br><br>
     Nome Da Música: <input type="text" name="musica"><br><br>
     <input type="submit">
 </form>
-
 </body>
 </html>

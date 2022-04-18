@@ -30,15 +30,9 @@ import vlc
 import sys
 import pandas as pd
 from subprocess import check_output
-
-if sys.version_info[0] < 3:
-    import Tkinter as Tk
-    from Tkinter import ttk
-    from Tkinter.filedialog import askopenfilename
-else:
-    import tkinter as Tk
-    from tkinter import ttk
-    from tkinter.filedialog import askopenfilename
+import tkinter as Tk
+from tkinter import ttk
+from tkinter.filedialog import askopenfilename
 
 # import standard libraries
 import os
@@ -81,7 +75,10 @@ class Player(Tk.Frame):
         ctrlpanel = ttk.Frame(self.parent)
         lab = ttk.Label(ctrlpanel, text=" Codigo Musica: ")
         lab1 = ttk.Label(ctrlpanel, text="Proxima Musica: ")
-        lab3 = ttk.Label (ctrlpanel, text=check_output(['hostname', '--all-ip-addresses']).split()[0])
+        if os.name == "nt":
+            lab3 = ttk.Label(ctrlpanel, text=check_output('ipconfig | find "IPv4"', shell = True).split()[-1])
+        else:
+            lab3 = ttk.Label(ctrlpanel, text=check_output(['hostname', '--all-ip-addresses']).split()[0])
         codigo = ttk.Entry(ctrlpanel)
         codigo.focus_force()
         lab3.pack(side=Tk.LEFT)
@@ -134,6 +131,14 @@ class Player(Tk.Frame):
                     self.player.set_hwnd(self.GetHandle())
                 else:
                     self.player.set_xwindow(self.GetHandle()) # this line messes up windows
+                self.player.play()
+            elif os.path.exists("./musicas/" + title):
+                Media = self.Instance.media_new("./musicas/" + title)
+                self.player.set_media(Media)
+                if platform.system() == 'Windows':
+                    self.player.set_hwnd(self.GetHandle())
+                else:
+                    self.player.set_xwindow(self.GetHandle())  # this line messes up windows
                 self.player.play()
             else:
                 print("Musica no catalogo porem arquivo .mp4 nao encontrado")

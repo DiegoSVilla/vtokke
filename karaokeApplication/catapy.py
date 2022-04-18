@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 import youtube_dl
 import pandas as pd
 import numpy as np
 import os
 
 app = Flask(__name__)
-df = pd.read_csv("/home/pi/karaokeApplication/catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
+if os.path.exists("/home/pi/karaokeApplication/catalogo.csv"):
+    df = pd.read_csv("/home/pi/karaokeApplication/catalogo.csv", delimiter =',', encoding = 'utf-8', dtype=str)
+else:
+    df = pd.read_csv("./catalogo.csv", delimiter=',', encoding='utf-8', dtype=str)
 if os.path.exists("catalogo_custom.csv"):
     dfc = pd.read_csv("catalogo_custom.csv", delimiter =',', encoding = 'utf-8', dtype=str)
     dt = pd.concat([df, dfc])
@@ -22,17 +25,20 @@ def downloadYouTube(videourl, path, name):
     os.chdir(path)
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([videourl])
-    os.chdir("/home/pi/karaokeApplication/")
+    if os.path.exists("/home/pi/karaokeApplication/"):
+        os.chdir("/home/pi/karaokeApplication/")
+    else:
+        os.chdir("../")
 
 @app.route('/', methods=['GET', 'POST'])
 def html_table():
     text = request.form.get('textbox') 
     print(text)
     if text is None:
-        return render_template('cataLogo.html',  tables=[dt.ix[:,[0,2,3,4]].to_html(classes='data', index=False)], titles=dt.ix[:,[0,2,3,4]].columns.values)
+        return render_template('cataLogo.html',  tables=[dt.iloc[:,[0,2,3,4]].to_html(classes='data', index=False)], titles=dt.iloc[:,[0,2,3,4]].columns.values)
     else:
         rows = np.column_stack([dt[col].str.contains(text, na=False, case=False) for col in dt])
-        return render_template('cataLogo.html',  tables=[dt.ix[:,[0,2,3,4]][rows.any(axis=1)].to_html(classes='data', index=False)], titles=dt.ix[:,[0,2,3,4]].columns.values)
+        return render_template('cataLogo.html',  tables=[dt.iloc[:,[0,2,3,4]][rows.any(axis=1)].to_html(classes='data', index=False)], titles=dt.iloc[:,[0,2,3,4]].columns.values)
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():
@@ -49,11 +55,14 @@ def handle_download():
     number = '90000'
     if not dfc.empty:
         number = str(int(dfc['code'].max()) + 1)
-    downloadYouTube(url, "/media/pi/Elements/karaoke/musicas/", number)
+    if os.path.exists("/media/pi/Elements/karaoke/musicas/"):
+        downloadYouTube(url, "/media/pi/Elements/karaoke/musicas/", number)
+    else:
+        downloadYouTube(url, "./musicas/", number)
     dfc = dfc.append(pd.Series([number, number + ".mp4" , artista, musica, "nan"], index=dfc.columns ), ignore_index=True)
     dfc.to_csv('catalogo_custom.csv', index=False, sep =',')
     dt = pd.concat([df, dfc])
-    return render_template('download.html')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
