@@ -13,18 +13,33 @@
     </style>
     <table style="width:100%">
         <tr>
+            <th>Ordem</th>
             <th>Codigo</th>
             <th>Nome</th>
             <th>Artista</th>
             <th>Responsavel</th>
+            <th>Delete</th>
+            <th>UP</th>
+            <th>DOWN</th>
         </tr>
         {% for index, table in tables.iterrows() %}
         <tr>
-            <th>{{ table['codigo'] }}</th>
+            <th>{{ '%02d' % index }}</th>
+            <th>{{ '%05d' % table['codigo'] }}</th>
             <th>{{ table['nome'] }}</th>
             <th>{{ table['artista'] }}</th>
             <th>{{ table['responsavel'] }}</th>
+        <th><form action="{{ url_for('delete_music', musc_id=index ~ '_' ~ table['codigo']) }}" method="post">
+            <input type=submit value="Delete">
+        </form></th>
+        <th><form action="{{ url_for('up_music', musc_id=index ~ '_' ~ table['codigo']) }}" method="post">
+            <input type=submit value="^^^">
+        </form></th>
+        <th><form action="{{ url_for('down_music', musc_id=index ~ '_' ~ table['codigo']) }}" method="post">
+            <input type=submit value="vvv">
+        </form></th>
         </tr>
+
         {% endfor %}
     </table>
 </div>

@@ -105,7 +105,7 @@ class Player(Tk.Frame):
                     print(dt[dt.code == int(codigo.get())])
                     while ggl.check_free('./filomena', 'vtk') != True:
                         print('filomena presa')
-                    fila = pd.read_csv('./filomena', index_col=[0])
+                    fila = pd.read_csv('./filomena')
                     fila = fila.append({'codigo':codigo.get(),'nome':dt[dt.code == int(codigo.get())].iloc[0,3],'artista': dt[dt.code == int(codigo.get())].iloc[0,2], 'responsavel':'vtk'}, ignore_index=True)
                     fila.to_csv('./filomena')
                     while ggl.release('./filomena', 'vtk') != True:
@@ -123,15 +123,18 @@ class Player(Tk.Frame):
             self.player.stop()
             while ggl.check_free('./filomena', 'vtk') != True:
                 print('filomena presa')
-            fila = pd.read_csv('./filomena', index_col=[0])
+            fila = pd.read_csv('./filomena')
             frst = fila.iloc[0]
             fila = fila.iloc[1:]
+            fila = fila.reset_index(drop=True)
             fila.to_csv('./filomena')
             while ggl.release('./filomena', 'vtk') != True:
                 print('incapaz de liberar filomena')
             print(fila)
-            if len(fila.index)>= 1:
-                lab1.configure(text = "Proxima Musica - " + frst['nome'] + " - " + frst['artista'])
+            if len(fila.index) > 1:
+                lab1.configure(text = "Proxima Musica - " + fila['nome'].iloc[0] + " - " + fila['artista'].iloc[0])
+            elif len(fila.index) == 1:
+                lab1.configure(text = "Proxima Musica - " + fila['nome'] + " - " + fila['artista'])
             else:
                 lab1.configure(text = "Proxima Musica: Nenhuma")
             if os.path.exists("/media/pi/Elements/karaoke/musicas/" + str(frst['codigo']).zfill(5) + '.mp4'):

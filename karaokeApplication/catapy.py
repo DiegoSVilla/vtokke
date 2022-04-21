@@ -5,6 +5,7 @@ import yt_dlp as youtube_dl
 import pandas as pd
 import numpy as np
 import os
+import guigolock as ggl
 
 app = Flask(__name__)
 if os.path.exists("/home/pi/karaokeApplication/catalogo.csv"):
@@ -41,7 +42,7 @@ def html_table():
         return render_template('cataLogo.html',  tables=[dt.iloc[:,[0,2,3,4]][rows.any(axis=1)].to_html(classes='data', index=False)], titles=dt.iloc[:,[0,2,3,4]].columns.values)
 
 @app.route('/fila', methods=['GET', 'POST'])
-def fila():
+def filas():
     fila = pd.read_csv('./filomena', index_col=[0])
     print(fila)
     return render_template('fila.html',  tables=fila, titles=fila.columns.values)
@@ -53,8 +54,69 @@ def fila_adm():
     return render_template('fila_adm.html',  tables=fila)
 
 @app.route('/delete/<musc_id>', methods=['POST'])
-def delete_movie(musc_id):
+def delete_music(musc_id):
     print(musc_id)
+    a = musc_id.split('_')
+    b = int(a[0])
+    c = int(a[1])
+    while ggl.check_free('./filomena', 'ctp') != True:
+        print('filomena presa')
+    fila = pd.read_csv('./filomena', index_col=[0])
+    if len(fila['codigo']) > 1 and fila['codigo'].iloc[b] == c:
+        fila = fila.drop(b)
+        fila = fila.reset_index(drop=True)
+    elif len(fila['codigo']) == 1 and int(fila['codigo']) == c:
+        fila = fila.drop(b)
+        fila = fila.reset_index(drop=True)
+    else:
+        print("tamo deletano coisa errada irmao")
+    fila.to_csv('./filomena')
+    while ggl.release('./filomena', 'ctp') != True:
+        print('incapaz de liberar filomena')
+    return redirect('/fila_adm')
+
+@app.route('/up/<musc_id>', methods=['POST'])
+def up_music(musc_id):
+    print(musc_id)
+    a = musc_id.split('_')
+    b = int(a[0])
+    c = int(a[1])
+    while ggl.check_free('./filomena', 'ctp') != True:
+        print('filomena presa')
+    fila = pd.read_csv('./filomena', index_col=[0])
+    if len(fila['codigo']) > 1 and b != 0 and fila['codigo'].iloc[b] == c:
+        tempind = fila.index.values.copy()
+        tempind[b] = b-1
+        tempind[b-1] = b
+        fila = fila.reindex(tempind)
+        fila = fila.reset_index(drop=True)
+    else:
+        print("tamo movendo coisa errada irmao")
+    fila.to_csv('./filomena')
+    while ggl.release('./filomena', 'ctp') != True:
+        print('incapaz de liberar filomena')
+    return redirect('/fila_adm')
+
+@app.route('/down/<musc_id>', methods=['POST'])
+def down_music(musc_id):
+    print(musc_id)
+    a = musc_id.split('_')
+    b = int(a[0])
+    c = int(a[1])
+    while ggl.check_free('./filomena', 'ctp') != True:
+        print('filomena presa')
+    fila = pd.read_csv('./filomena', index_col=[0])
+    if len(fila['codigo']) > 1 and b < len(fila['codigo'])-1 and fila['codigo'].iloc[b] == c:
+        tempind = fila.index.values.copy()
+        tempind[b] = b+1
+        tempind[b+1] = b
+        fila = fila.reindex(tempind)
+        fila = fila.reset_index(drop=True)
+    else:
+        print("tamo movendo coisa errada irmao")
+    fila.to_csv('./filomena')
+    while ggl.release('./filomena', 'ctp') != True:
+        print('incapaz de liberar filomena')
     return redirect('/fila_adm')
 
 @app.route('/download', methods=['GET', 'POST'])

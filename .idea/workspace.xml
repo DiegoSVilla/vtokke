@@ -42,7 +42,7 @@
       <recent name="C:\Users\Diego\Documents\GitHub\vtokke\karaokeApplication\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.vtokke">
+  <component name="RunManager" selected="Python.catapy">
     <configuration name="catapy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="vtokke" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,8 +87,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.vtokke" />
         <item itemvalue="Python.catapy" />
+        <item itemvalue="Python.vtokke" />
       </list>
     </recent_temporary>
   </component>
@@ -102,5 +102,16 @@
       <updated>1649943644002</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/karaokeApplication/catapy.py</url>
+          <line>86</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
