@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from flask import Flask, request, render_template, redirect
-import youtube_dl
+import yt_dlp as youtube_dl
 import pandas as pd
 import numpy as np
 import os
@@ -39,6 +39,23 @@ def html_table():
     else:
         rows = np.column_stack([dt[col].str.contains(text, na=False, case=False) for col in dt])
         return render_template('cataLogo.html',  tables=[dt.iloc[:,[0,2,3,4]][rows.any(axis=1)].to_html(classes='data', index=False)], titles=dt.iloc[:,[0,2,3,4]].columns.values)
+
+@app.route('/fila', methods=['GET', 'POST'])
+def fila():
+    fila = pd.read_csv('./filomena', index_col=[0])
+    print(fila)
+    return render_template('fila.html',  tables=fila, titles=fila.columns.values)
+
+@app.route('/fila_adm', methods=['GET', 'POST'])
+def fila_adm():
+    fila = pd.read_csv('./filomena', index_col=[0])
+    print(fila)
+    return render_template('fila_adm.html',  tables=fila)
+
+@app.route('/delete/<musc_id>', methods=['POST'])
+def delete_movie(musc_id):
+    print(musc_id)
+    return redirect('/fila_adm')
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():

@@ -40,6 +40,7 @@ import pathlib
 from threading import Thread, Event
 import time
 import platform
+import guigolock as ggl
 
 current_location = os.path.dirname(os.path.abspath(__file__)) + '/'
 
@@ -50,7 +51,7 @@ if os.path.exists("catalogo_custom.csv"):
 else:
     dt = df
 dt["code"] = pd.to_numeric(dt["code"])
-fila = pd.DataFrame(columns=['codigo'])
+pd.DataFrame(columns=['codigo', 'nome','artista', 'responsavel']).to_csv('./filomena')
 
 
 class Player(Tk.Frame):
@@ -58,7 +59,6 @@ class Player(Tk.Frame):
     """
         
     def __init__(self, parent, title=None):
-        global fila
         Tk.Frame.__init__(self, parent)
         self.parent = parent
 
@@ -91,7 +91,6 @@ class Player(Tk.Frame):
         ctrlpanel2.pack(side=Tk.BOTTOM,fill=Tk.X)
 
         def addList(btn):
-            global fila
             global dt
             # if a file is already running, then stop it.
             if codigo.get() != '':
@@ -104,36 +103,47 @@ class Player(Tk.Frame):
                 dt["code"] = pd.to_numeric(dt["code"])
                 if (any(dt.code == int(codigo.get()))):
                     print(dt[dt.code == int(codigo.get())])
-                    fila = fila.append({ 'codigo' : int(codigo.get())} , ignore_index=True)
+                    while ggl.check_free('./filomena', 'vtk') != True:
+                        print('filomena presa')
+                    fila = pd.read_csv('./filomena', index_col=[0])
+                    fila = fila.append({'codigo':codigo.get(),'nome':dt[dt.code == int(codigo.get())].iloc[0,3],'artista': dt[dt.code == int(codigo.get())].iloc[0,2], 'responsavel':'vtk'}, ignore_index=True)
+                    fila.to_csv('./filomena')
+                    while ggl.release('./filomena', 'vtk') != True:
+                        print('incapaz de liberar filomena')
                     print(fila)
                     if len(fila.index)== 1:
-                        lab1.configure(text = "Proxima Musica - " + dt[dt.code == fila.iloc[0,0]].iloc[0,3] + " - " + dt[dt.code == fila.iloc[0,0]].iloc[0,2])
+                        lab1.configure(text = "Proxima Musica - " + fila['nome'].iloc[0] + " - " + fila['artista'].iloc[0])
                 else:
                     print("Musica nao esta no catalogo")
             codigo.delete(0,'end')
                 
                 
         def onopen(btn):
-            global fila
             # if a file is already running, then stop it.
             self.player.stop()
-            print(fila)
-            title = dt[dt.code == fila.iloc[0,0]].iloc[0,1]
+            while ggl.check_free('./filomena', 'vtk') != True:
+                print('filomena presa')
+            fila = pd.read_csv('./filomena', index_col=[0])
+            frst = fila.iloc[0]
             fila = fila.iloc[1:]
+            fila.to_csv('./filomena')
+            while ggl.release('./filomena', 'vtk') != True:
+                print('incapaz de liberar filomena')
+            print(fila)
             if len(fila.index)>= 1:
-                lab1.configure(text = "Proxima Musica - " + dt[dt.code == fila.iloc[0,0]].iloc[0,3] + " - " + dt[dt.code == fila.iloc[0,0]].iloc[0,2])
+                lab1.configure(text = "Proxima Musica - " + frst['nome'].iloc[0] + " - " + frst['artista'].iloc[0])
             else:
                 lab1.configure(text = "Proxima Musica: Nenhuma")
-            if os.path.exists("/media/pi/Elements/karaoke/musicas/" + title):
-                Media = self.Instance.media_new("/media/pi/Elements/karaoke/musicas/" + title)
+            if os.path.exists("/media/pi/Elements/karaoke/musicas/" + str(frst['codigo']).zfill(5) + '.mp4'):
+                Media = self.Instance.media_new("/media/pi/Elements/karaoke/musicas/" + str(frst['codigo']).zfill(5) + '.mp4')
                 self.player.set_media(Media)
                 if platform.system() == 'Windows':
                     self.player.set_hwnd(self.GetHandle())
                 else:
                     self.player.set_xwindow(self.GetHandle()) # this line messes up windows
                 self.player.play()
-            elif os.path.exists("./musicas/" + title):
-                Media = self.Instance.media_new("./musicas/" + title)
+            elif os.path.exists("./musicas/" + str(frst['codigo']).zfill(5) + '.mp4'):
+                Media = self.Instance.media_new("./musicas/" + str(frst['codigo']).zfill(5) + '.mp4')
                 self.player.set_media(Media)
                 if platform.system() == 'Windows':
                     self.player.set_hwnd(self.GetHandle())
