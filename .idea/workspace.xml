@@ -42,7 +42,7 @@
       <recent name="C:\Users\Diego\Documents\GitHub\vtokke\karaokeApplication\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.catapy">
+  <component name="RunManager" selected="Python.vtokke">
     <configuration name="catapy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="vtokke" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,8 +87,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.catapy" />
         <item itemvalue="Python.vtokke" />
+        <item itemvalue="Python.catapy" />
       </list>
     </recent_temporary>
   </component>

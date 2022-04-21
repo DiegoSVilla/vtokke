@@ -131,7 +131,7 @@ class Player(Tk.Frame):
                 print('incapaz de liberar filomena')
             print(fila)
             if len(fila.index)>= 1:
-                lab1.configure(text = "Proxima Musica - " + frst['nome'].iloc[0] + " - " + frst['artista'].iloc[0])
+                lab1.configure(text = "Proxima Musica - " + frst['nome'] + " - " + frst['artista'])
             else:
                 lab1.configure(text = "Proxima Musica: Nenhuma")
             if os.path.exists("/media/pi/Elements/karaoke/musicas/" + str(frst['codigo']).zfill(5) + '.mp4'):
